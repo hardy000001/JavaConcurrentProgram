@@ -1,7 +1,7 @@
-package com.zeluli0518.one;
+package com.zeluli0518.concurrent;
 
 public class Main {
-	private static final long count = 100000000;
+	private static final long count = 1000000000;	//10亿
 	public static void main(String[] args) throws InterruptedException {
 		concurrent();
 		serial();
@@ -9,14 +9,16 @@ public class Main {
 	
 	private static void concurrent() throws InterruptedException {
 		long start = System.currentTimeMillis();
+		
 		Thread thread = new Thread(new Runnable() {
-			
 			@Override
 			public void run() {
 				long a = 0;
 				for (long i = 0; i < count; i++) {
 					a += 10;
 				}
+				long time = System.currentTimeMillis() - start;
+				System.out.println("concurrent a time: " + time + "ms, a = " + a);
 			}
 		});
 		thread.start();
@@ -27,8 +29,11 @@ public class Main {
 		}
 		
 		long time = System.currentTimeMillis() - start;
+		
 		thread.join();
-		System.out.println("concurrent : " + time + "ms, b = " + b);
+		
+		long allTime = System.currentTimeMillis() - start;
+		System.out.println("concurrent all time: " + allTime + "ms, b time: " + time  + "ms, b = " + b + "\n");
 	}
 	
 	private static void serial() {
@@ -44,7 +49,7 @@ public class Main {
 		}
 		
 		long time = System.currentTimeMillis() - start;
-		System.out.println("concurrent : " + time + "ms, b = " + b + " a = " + a);
+		System.out.println("serial all time: " + time + "ms, b = " + b + ", a = " + a);
 	}
 
 }
